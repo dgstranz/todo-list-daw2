@@ -15,6 +15,7 @@
 
 	function addTodo(text) {
 		var checked = false;
+		var creationDate = new Date();
 		var todo = {
 			getId: (function(myId) {
 				return function() {
@@ -37,6 +38,18 @@
 					checked = myState;
 				}
 			},
+			getCreationDate: function() {
+				return creationDate;
+			},
+			setCreationDate: function(myDate) {
+				creationDate = myDate;
+			},
+			getCheckedDate: function() {
+				return checkedDate;
+			},
+			setCheckedDate: function(myDate) {
+				checkedDate = myDate;
+			},
 			isVisible: isVisible,
 			isDeleted: function() {
 				return false;
@@ -47,7 +60,6 @@
 		id++;
 
 		return todo;
-
 	}
 
 	function getTodo(id) {
@@ -71,6 +83,12 @@
 
 	function checkTodo(id, state) {
 		todos[id].setChecked(state);
+		if(todos[id].getChecked()) {
+			todos[id].setCheckedDate(new Date());
+		}
+		else {
+			todos[id].setCheckedDate(undefined);
+		}
 		return todos[id];
 	}
 
@@ -87,8 +105,14 @@
 			} else {
 				s += ", ";
 			}
-			s += "{checked: " + todos[prop].getChecked();
-			s += ", text: " + todos[prop].getText() + "}";
+			s += "{id: " + todos[prop].getId();
+			s += ", checked: " + todos[prop].getChecked();
+			s += ", text: " + todos[prop].getText();
+			s += ", creationDate: " + todos[prop].getCreationDate();
+			if (todos[prop].getCheckedDate()) {
+				s += ", checkedDate: " + todos[prop].getCheckedDate();
+			}
+			s += "}";
 		}
 		s += "]";
 		return s;
